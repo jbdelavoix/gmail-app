@@ -1,7 +1,7 @@
 {
   "name": "gmail-app",
   "productName": "Gmail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A desktop application for Gmail",
   "author": "jbaptistetrb <jbaptistetrb@users.noreply.github.com> (https://github.com/jbaptistetrb)",
   "homepage": "https://github.com/jbaptistetrb/gmail-app",
@@ -18,7 +18,7 @@
   "build": {
     "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
-      "**/*"
+      "src/*"
     ],
     "appId": "jbaptistetrb.gmail-app",
     "mac": {

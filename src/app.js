@@ -1,9 +1,14 @@
 const {
   app,
   ipcMain,
+  session,
   BrowserWindow,
   Menu
 } = require("electron")
+
+const path = require("path")
+const fs = require("fs")
+
 
 let mainWindow = null
 
@@ -112,89 +117,42 @@ let template = [{
 
 menu = Menu.buildFromTemplate(template)
 
-
-function pageProcess() {
-
-  window.onbeforeunload = function (e) {
-    // Unlike usual browsers, in which a string should be returned and the user is
-    // prompted to confirm the page unload. Electron gives the power completely
-    // to the developers, return empty string or false would prevent the unloading
-    // now. You can also use the dialog API to let user confirm it.
-    // return false
-  }
-
-  function isInt(value) {
-    return !isNaN(value) && (function (x) {
-      return (x | 0) === x
-    })(parseFloat(value))
-  }
-
-  function getElementsByXPath(xpath, parent) {
-    let results = [];
-    let query = document.evaluate(xpath, parent || document,
-      null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (let i = 0, length = query.snapshotLength; i < length; ++i) {
-      results.push(query.snapshotItem(i));
-    }
-    return results;
-  }
-
-  let ipcRenderer = window["require"]("electron").ipcRenderer
-
-  function loopFunction() {
-    header = document.getElementById("gb")
-    header.setAttribute("style", "background: rgba(16, 16, 16, 0.30); padding-top: 20px; -webkit-user-select: none; -webkit-app-region: drag;")
-
-    links = document.getElementsByTagName("a")
-    for (let i = 0; i < links.length; i++) {
-      link = links[i]
-      link.removeAttribute("target")
-    }
-
-    let unreadMails = 0
-
-    elements = getElementsByXPath("//div[contains(@class, 'n3')]/div[contains(@class, 'byl')][1]/div[contains(@class, 'TK')]/div[contains(@class, 'aim')]//div[contains(@class, 'bsU')]/text()")
-    for (let i = 0; i < elements.length; i++) {
-      element = elements[i]
-      elementText = element.data
-      if (isInt(elementText)) {
-        unreadMails += parseInt(elementText)
-      }
-    }
-    ipcRenderer.send("unread-mails", unreadMails)
-  }
-
-  function loop() {
-    try {
-      loopFunction()
-    } catch (error) {
-      console.error(error)
-    }
-    setTimeout(loop, 500)
-  }
-  loop()
-}
-
 function createWindow() {
+
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    const url = new URL(details.url)
+    // Google login : Will throw a "Your browser is unsecured" and will not permit authentification,
+    // even using a valid Chrome User-Agent
+    // See https://github.com/timche/gmail-desktop/issues/174
+    // Using a Firefox User-Agent works
+    if (url.hostname == "accounts.google.com") {
+      details.requestHeaders["User-Agent"] = "Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/73.0"
+    }
+    callback({
+      cancel: false,
+      requestHeaders: details.requestHeaders
+    })
+  })
 
   mainWindow = new BrowserWindow({
     width: 1600,
     height: 900,
     titleBarStyle: "hiddenInset",
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: path.join(__dirname, "preload.js")
     }
   })
 
-  mainWindow.loadURL("https://www.gmail.com")
+  mainWindow.loadURL("https://accounts.google.com/signin/v2/identifier?service=mail")
 
-  wc = mainWindow.webContents
-
-  wc.on("did-finish-load", function () {
-    wc.executeJavaScript(pageProcess.toString() + "; pageProcess()", true)
+  mainWindow.webContents.on("dom-ready", () => {
+    mainWindow.webContents.insertCSS(
+      fs.readFileSync(path.join(__dirname, "style.css"), "utf8")
+    )
   })
 
-  ipcMain.on("unread-mails", function (event, unreadMails) {
+  ipcMain.on("unread-count", function (event, unreadMails) {
     if (unreadMails != 0) {
       app.dock.setBadge(unreadMails.toString())
     } else {

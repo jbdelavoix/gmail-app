@@ -1,0 +1,6 @@
+#gb {
+    background: rgba(16, 16, 16, 0.30) !important;
+    padding-top: 20px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+}
