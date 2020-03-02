@@ -1,7 +1,7 @@
 {
   "name": "gmail-app",
   "productName": "Gmail",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A desktop application for Gmail",
   "author": "jbaptistetrb <jbaptistetrb@users.noreply.github.com> (https://github.com/jbaptistetrb)",
   "homepage": "https://github.com/jbaptistetrb/gmail-app",
@@ -12,13 +12,14 @@
     "dist": "electron-builder --macos --linux --windows --publish never"
   },
   "devDependencies": {
-    "electron": "^6.0.12",
-    "electron-builder": "^21.2.0"
+    "electron": "*",
+    "electron-builder": "*"
   },
   "build": {
     "artifactName": "${name}-${version}-${os}.${ext}",
     "files": [
-      "src/*"
+      "**/*",
+      "build/icon.*"
     ],
     "appId": "jbaptistetrb.gmail-app",
     "mac": {
