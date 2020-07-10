@@ -67,3 +67,5 @@ window.addEventListener("contextmenu", (e) => {
   e.preventDefault()
   ipcRenderer.send("contextmenu:open", e.x, e.y)
 }, false)
+
+console.log("preload.js loaded")

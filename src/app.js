@@ -124,7 +124,7 @@ function createWindow() {
     // See https://github.com/timche/gmail-desktop/issues/174
     // Using a Firefox User-Agent works
     if (url.hostname == "accounts.google.com") {
-      details.requestHeaders["User-Agent"] = "Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/73.0"
+      details.requestHeaders["User-Agent"] = "Mozilla/5.0 (Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0"
     }
     callback({
       cancel: false,
@@ -137,9 +137,8 @@ function createWindow() {
     width: 1600,
     height: 900,
     titleBarStyle: "hiddenInset",
-    icon: path.join(__dirname, "/build/icons/icon.png"),
+    icon: path.join(__dirname, "../build/icons/icon.png"),
     webPreferences: {
-      nodeIntegration: false,
       preload: path.join(__dirname, "preload.js")
     }
   })
@@ -235,8 +234,7 @@ addMenu(process.platform)
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function () {
-  if (process.platform != "darwin")
-    app.quit()
+  app.quit()
 })
 
 // This method will be called when Electron has done everything
