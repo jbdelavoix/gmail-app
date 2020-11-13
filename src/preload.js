@@ -26,12 +26,6 @@ function getUnreadCount() {
 
 
 function updateUnreadCount() {
-  // Remove target on links
-  let links = document.getElementsByTagName("a")
-  for (let i = 0; i < links.length; i++) {
-    let link = links[i]
-    link.removeAttribute("target")
-  }
 
   let newCount = getUnreadCount()
 

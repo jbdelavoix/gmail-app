@@ -156,6 +156,11 @@ function createWindow() {
     )
   })
 
+  mainWindow.webContents.on('new-window', function (e, url) {
+    e.preventDefault()
+    mainWindow.loadURL(url)
+  })
+
   // On ipcEvent...
   ipcMain.on("unread-mails:count", function (event, unreadMails) {
     if (unreadMails != 0) {
