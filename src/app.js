@@ -8,102 +8,21 @@ const {
 const fs = require("fs")
 const path = require("path")
 
+const website_url = "https://accounts.google.com/signin/v2/identifier?service=mail"
 
 function addMenu(platform) {
-  let menu = Menu.buildFromTemplate([{
-      label: "Home",
-      submenu: [{
-          role: "about"
-        },
-        {
-          type: "separator"
-        },
-        {
-          label: "Services",
-          submenu: []
-        },
-        {
-          type: "separator"
-        },
-        {
-          role: "hide"
-        },
-        {
-          role: "hideOthers"
-        },
-        {
-          role: "unhide"
-        },
-        {
-          type: "separator"
-        },
-        {
-          role: "quit"
-        },
-      ]
-    },
+  let menu = Menu.buildFromTemplate([
+    { role: "appMenu" },
+    { role: "editMenu" },
+    { role: "viewMenu" },
+    { role: "windowMenu" },
     {
-      label: "Edit",
-      submenu: [{
-          role: "undo"
-        },
-        {
-          role: "redo"
-        },
-        {
-          type: "separator"
-        },
-        {
-          role: "cut"
-        },
-        {
-          role: "copy"
-        },
-        {
-          role: "paste"
-        }
-      ]
-    }, {
-      label: "View",
-      submenu: [{
-          role: "reload"
-        },
-        {
-          role: "toggledevtools"
-        },
-        {
-          type: "separator"
-        },
-        {
-          role: "resetzoom"
-        },
-        {
-          role: "zoomin"
-        },
-        {
-          role: "zoomout"
-        },
-        {
-          type: "separator"
-        },
-        {
-          role: "togglefullscreen"
-        }
-      ]
-    }, {
-      role: "window",
-      submenu: [{
-          role: "minimize"
-        },
-        {
-          role: "close"
-        }
-      ]
-    }, {
       role: "help",
-      submenu: [{
-        label: "Learn More"
-      }]
+      submenu: [
+        {
+          label: "Learn More"
+        }
+      ]
     }
   ])
 
@@ -143,11 +62,8 @@ function createWindow() {
     }
   })
 
-  // Open the devtools
-  // mainWindow.openDevTools()
-
   // Load the app
-  mainWindow.loadURL("https://accounts.google.com/signin/v2/identifier?service=mail")
+  mainWindow.loadURL(website_url)
 
   // Load custom style
   mainWindow.webContents.on("dom-ready", () => {
@@ -172,36 +88,36 @@ function createWindow() {
 
   ipcMain.on("contextmenu:open", function (event, x, y) {
     let contextmenu = Menu.buildFromTemplate([{
-        role: "undo"
+      role: "undo"
+    },
+    {
+      role: "redo"
+    },
+    {
+      type: "separator"
+    },
+    {
+      role: "cut"
+    },
+    {
+      role: "copy"
+    },
+    {
+      role: "paste"
+    },
+    {
+      type: "separator"
+    },
+    {
+      label: "Advanced",
+      submenu: [{
+        role: "reload"
       },
       {
-        role: "redo"
+        role: "toggleDevTools"
       },
-      {
-        type: "separator"
-      },
-      {
-        role: "cut"
-      },
-      {
-        role: "copy"
-      },
-      {
-        role: "paste"
-      },
-      {
-        type: "separator"
-      },
-      {
-        label: "Advanced",
-        submenu: [{
-            role: "reload"
-          },
-          {
-            role: "toggledevtools"
-          },
-        ]
-      }
+      ]
+    }
     ])
     contextmenu.popup({
       window: mainWindow,
