@@ -43,7 +43,7 @@ function createWindow() {
     // See https://github.com/timche/gmail-desktop/issues/174
     // Using a Firefox User-Agent works
     if (url.hostname == "accounts.google.com") {
-      details.requestHeaders["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64; rv:106.0) Gecko/20100101 Firefox/106.0"
+      details.requestHeaders["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64; rv:123.0) Gecko/20100101 Firefox/123.0"
     }
     callback({
       cancel: false,

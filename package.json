@@ -1,7 +1,7 @@
 {
   "name": "gmail-app",
   "productName": "Gmail",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A desktop application for Gmail",
   "author": "jbdelavoix <jbdelavoix@users.noreply.github.com> (https://github.com/jbdelavoix)",
   "homepage": "https://github.com/jbdelavoix/gmail-app",
@@ -12,8 +12,8 @@
     "dist": "electron-builder --macos --linux --windows --publish never"
   },
   "devDependencies": {
-    "electron": "^21.2.0",
-    "electron-builder": "^23.6.0"
+    "electron": "^30.0.2",
+    "electron-builder": "^24.13.3"
   },
   "build": {
     "artifactName": "${name}-${version}-${os}.${ext}",
@@ -32,7 +32,6 @@
         "deb",
         "rpm",
         "pacman",
-        "snap",
         "tar.bz2"
       ],
       "category": "Network;Office"
